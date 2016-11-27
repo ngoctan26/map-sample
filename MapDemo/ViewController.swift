@@ -15,7 +15,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
     var didFindMyLocation = false
     
     // Views properties
-    @IBOutlet var viewMap: GMSMapView!
+    @IBOutlet weak var m_viewMap: GMSMapView!
     
 
     override func viewDidLoad() {
@@ -34,26 +34,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate{
         locationManger.requestWhenInUseAuthorization()
         
         // Add observer for changes in myLocation in viewMap
-        viewMap.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
+        m_viewMap.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
         
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == CLAuthorizationStatus.authorizedWhenInUse {
             // User have allow to access current location
-            viewMap.isMyLocationEnabled = true
+            m_viewMap.isMyLocationEnabled = true
         }
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if !didFindMyLocation {
             // Current location is detected
-            guard let currentLocation = viewMap.myLocation else {
+            guard let currentLocation = m_viewMap.myLocation else {
                 print("Current location is nil")
                 return
             }
-            viewMap.camera = GMSCameraPosition.camera(withTarget: (currentLocation.coordinate), zoom: 15.0)
-            viewMap.settings.myLocationButton = true // This property enable my location button on Map
+            m_viewMap.camera = GMSCameraPosition.camera(withTarget: (currentLocation.coordinate), zoom: 15.0)
+            m_viewMap.settings.myLocationButton = true // This property enable my location button on Map
         }
     }
 
